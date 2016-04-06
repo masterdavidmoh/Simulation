@@ -1,0 +1,85 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Simulation_Assignment
+{
+    /// <summary>
+    /// datastructure containing the state of the current simulation
+    /// </summary>
+    public class simulationState
+    {
+        private Dictionary<int,station> _stations;
+        private Dictionary<int,tram> _trams;
+
+        public simulationState()
+        {
+            _stations = new List<station>();
+            _trams = new List<tram>();
+        }
+
+        /// <summary>
+        /// adds the station to the simulation state
+        /// </summary>
+        /// <param name="s">station to be added</param>
+        /// <returns>true if he station was added succesfully false otherwise</returns>
+        public bool addStation(station s)
+        {
+            try
+            {
+                _stations.Add(s.ID, s);
+                return true;
+            }
+                //should never happen, as this would mean we have multiple stations with the same id, CHECK WHEN ADDING!!!!!
+            catch (ArgumentException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// adds a tram to the simulation state
+        /// </summary>
+        /// <param name="t">tram to be added</param>
+        /// <returns>true if he tram was added succesfully false otherwise</returns>
+        public bool addTram(tram t)
+        {
+            try
+            {
+                _trams.Add(t.ID, t);
+                return true;
+            }
+            //should never happen, as this would mean we have multiple stations with the same id, CHECK WHEN ADDING!!!!!
+            catch (ArgumentException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// gets the station with ID
+        /// </summary>
+        /// <param name="ID">ID of the station to get</param>
+        /// <returns>the station with id ID if it exists, null otherwise</returns>
+        public station getStation(int ID)
+        {
+            station s;
+            _stations.TryGetValue(ID, s);
+            return s;
+                
+        }
+
+        /// <summary>
+        /// gets the tram with ID
+        /// </summary>
+        /// <param name="ID">ID of the tram to get</param>
+        /// <returns>the tram with id ID if it exist, null otherwise</returns>
+        public tram getTram(int ID)
+        {
+            tram t;
+            _trams.TryGetValue(ID, t);
+            return t;
+        }
+    }
+}

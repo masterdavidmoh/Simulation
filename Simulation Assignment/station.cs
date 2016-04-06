@@ -7,12 +7,18 @@ namespace Simulation_Assignment
 {
     class station
     {
-        private List<int> arrivalTimes;
-        private int ID;
-        private string name;
-        private int nextStationID;
+        private List<int> _arrivalTimes;
+        private int _ID;
+        private string _name;
+        private int _nextStationID;
 
         //maybe add data for inter arival times
         //maybe add data for travel time to next station
+
+
+        public int ID
+        {
+            get { return _ID; }
+        }
     }
 }
