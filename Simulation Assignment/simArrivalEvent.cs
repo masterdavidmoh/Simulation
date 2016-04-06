@@ -7,13 +7,13 @@ namespace Simulation_Assignment
 {
     public class simArrivalEvent : simEvent
     {
-        public simArrivalEvent(int time, int stationID)
+        public simArrivalEvent(int time, int stationID, int tramID)
             :base(EventType.ArrivalTram,time)
         {
 
         }
 
-        public override void executeEvent()
+        public override void executeEvent(simulationState state)
         {
             throw new NotImplementedException();
         }

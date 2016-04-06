@@ -12,11 +12,19 @@ namespace Simulation_Assignment
     {
         private Dictionary<int,station> _stations;
         private Dictionary<int,tram> _trams;
+        private Dictionary<int, Queue<int>> _stationQueues;
+        private simulationManager _manager;
 
-        public simulationState()
+        public simulationState(simulationManager manager)
         {
+            _manager = manager;
             _stations = new List<station>();
             _trams = new List<tram>();
+        }
+
+        public simulationManager simulationManager
+        {
+            get { return _manager; }
         }
 
         /// <summary>
@@ -29,6 +37,7 @@ namespace Simulation_Assignment
             try
             {
                 _stations.Add(s.ID, s);
+                _stationQueues.Add(s.ID, new Queue<int>())
                 return true;
             }
                 //should never happen, as this would mean we have multiple stations with the same id, CHECK WHEN ADDING!!!!!
@@ -68,6 +77,18 @@ namespace Simulation_Assignment
             _stations.TryGetValue(ID, s);
             return s;
                 
+        }
+
+        /// <summary>
+        /// gets queue before the station with ID
+        /// </summary>
+        /// <param name="ID">ID of the station to get the queue for</param>
+        /// <returns>the the queue for station with id ID if it exists, null otherwise</returns>
+        public Queue<int> getStationQueue(int ID)
+        {
+            Queue<int> q;
+            _stationQueues.TryGetValue(ID, q);
+            return q;
         }
 
         /// <summary>

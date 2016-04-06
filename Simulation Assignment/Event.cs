@@ -20,7 +20,7 @@ namespace Simulation_Assignment
  
         }
 
-        abstract public void executeEvent();
+        abstract public void executeEvent(simulationState state);
         
         public int CompareTo(simEvent other)
         {

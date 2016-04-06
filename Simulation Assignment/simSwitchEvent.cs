@@ -13,7 +13,7 @@ namespace Simulation_Assignment
 
         }
 
-        public override void executeEvent()
+        public override void executeEvent(simulationState state)
         {
             throw new NotImplementedException();
         }
