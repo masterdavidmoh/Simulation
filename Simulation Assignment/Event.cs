@@ -10,8 +10,8 @@ namespace Simulation_Assignment
     {
         public enum EventType {ArrivalPassenger, Queue, ArrivalTram, DepartureTram, Switch };
 
-        private EventType eventType;
-        private int _time;
+        protected EventType eventType;
+        protected int _time;
 
         public simEvent(EventType eventType, int time)
         {
