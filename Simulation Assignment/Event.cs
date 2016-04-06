@@ -6,27 +6,23 @@ using System.Threading.Tasks;
 
 namespace Simulation_Assignment
 {
-    class Event: IComparable<Event>
+    public abstract class simEvent: IComparable<simEvent>
     {
-        public enum EventType {ArrivalPassenger, Queue, ArrivalTram, DepartureTram };
+        public enum EventType {ArrivalPassenger, Queue, ArrivalTram, DepartureTram, Switch };
 
         EventType eventType;
         int time;
 
-        public Event(EventType eventType, int time)
+        public simEvent(EventType eventType, int time)
         {
             this.eventType = eventType;
             this.time = time;
  
         }
 
-        public void executeEvent()
-        {
-
-
-        }
-
-        public int CompareTo(Event other)
+        abstract public void executeEvent();
+        
+        public int CompareTo(simEvent other)
         {
             if (this.time < other.time) return -1;
             else if (this.time > other.time) return 1;

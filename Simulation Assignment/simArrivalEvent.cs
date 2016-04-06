@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Simulation_Assignment
 {
-    class simArrivalEvent:Event
+    public class simArrivalEvent : simEvent
     {
         public simArrivalEvent(int time, int stationID)
             :base(EventType.ArrivalTram,time)
