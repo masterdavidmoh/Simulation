@@ -7,8 +7,13 @@ namespace Simulation_Assignment
 {
     class tram
     {
-        private int ID;
-        private int passengers;
-        private int station; //id of the station its at or on its way to the queue for
+        private int _ID;
+        private int _passengers;
+        private int _station; //id of the station its at or on its way to the queue for
+
+        public int ID
+        {
+            get { return _ID; }
+        }
     }
 }
