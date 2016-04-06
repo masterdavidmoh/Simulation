@@ -11,12 +11,12 @@ namespace Simulation_Assignment
         public enum EventType {ArrivalPassenger, Queue, ArrivalTram, DepartureTram, Switch };
 
         private EventType eventType;
-        private int time;
+        private int _time;
 
         public simEvent(EventType eventType, int time)
         {
             this.eventType = eventType;
-            this.time = time;
+            this._time = time;
  
         }
 
@@ -24,14 +24,14 @@ namespace Simulation_Assignment
         
         public int CompareTo(simEvent other)
         {
-            if (this.time < other.time) return -1;
-            else if (this.time > other.time) return 1;
+            if (this._time < other._time) return -1;
+            else if (this._time > other._time) return 1;
             else return 0;
         }
 
         public int time
         {
-            get{return this.time;}
+            get{return this._time;}
         }
     }
 }

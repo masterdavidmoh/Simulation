@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Simulation_Assignment
 {
-    class tram
+    public class tram
     {
         private int _ID;
         private int _passengers;

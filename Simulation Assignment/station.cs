@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Simulation_Assignment
 {
-    class station
+    public class station
     {
         private List<int> _arrivalTimes;
         private int _ID;

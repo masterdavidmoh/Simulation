@@ -9,6 +9,7 @@ namespace Simulation_Assignment
     {
         private EventQueue queue;
         int simulationTime;
+        simulationState _state;
 
         public simulationManager()
         {
@@ -25,7 +26,7 @@ namespace Simulation_Assignment
                 currentEvent = queue.pop();
                 simulationTime = currentEvent.time;
 
-                currentEvent.executeEvent();
+                currentEvent.executeEvent(_state);
             }
         }
 
