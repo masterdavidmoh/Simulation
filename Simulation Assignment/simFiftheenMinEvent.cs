@@ -27,6 +27,8 @@ namespace Simulation_Assignment.Simulation_Assignment
                 i++;
                 s = state.getStation(i);
             }
+
+            state.simulationManager.addEvent(new simFiftheenMinEvent(time + (15 * 60)));
         }
     }
 }
