@@ -75,5 +75,11 @@ namespace Simulation_Assignment
             state.simulationManager.addEvent(new simSwitchEvent(0, _ID)); //TODO get time for switch to release 
 
         }
+
+        public bool switchEmpty
+        {
+            get { return _switchEmpty; }
+            set { _switchEmpty = value; }
+        }
     }
 }

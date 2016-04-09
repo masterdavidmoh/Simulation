@@ -22,7 +22,6 @@ namespace Simulation_Assignment
             station s = state.getStation(_station);
             Queue<int> sq = state.getStationQueue(_station);
 
-            //TODO add list of trains that want to depart but cant yet
             if (s.canTramDepart())
             {
                 s.departTrain(state);
@@ -37,6 +36,10 @@ namespace Simulation_Assignment
                     if (s.canTramArive())
                         s.scheduleArival(state, sq.Dequeue());
                 }
+            }
+            else
+            {
+                s.addDepartureQueue(_tram);
             }
         }
     }

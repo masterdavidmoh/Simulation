@@ -12,6 +12,7 @@ namespace Simulation_Assignment
         protected string _name;
         protected int _nextStationID;
         protected bool _trainInStation;
+        protected List<int> _departureQue;
 
         //maybe add data for inter arival times
         //maybe add data for travel time to next station
@@ -92,6 +93,35 @@ namespace Simulation_Assignment
         public int getExiting(int max)
         {
             return Math.Min(0,max); //TODO add number of people exiting
+        }
+
+        /// <summary>
+        /// adds a tram to the departure queue
+        /// </summary>
+        /// <param name="tram">tramID that wants to depart</param>
+        public void addDepartureQueue(int tram)
+        {
+            _departureQue.Add(tram);
+        }
+
+        /// <summary>
+        /// pops the first tram from the departure queue
+        /// </summary>
+        /// <returns>first tram in the queue</returns>
+        public int popDepartureQueue()
+        {
+            int d = _departureQue[0];
+            _departureQue.RemoveAt(0);
+            return d;
+        }
+
+        /// <summary>
+        /// check if the departure queue is empty;
+        /// </summary>
+        /// <returns>true if the queue is emtpy</returns>
+        public bool isDepartureQueueEmpty()
+        {
+            return _departureQue.Count == 0;
         }
 
         /// <summary>
