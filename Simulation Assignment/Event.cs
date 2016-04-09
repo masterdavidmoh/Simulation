@@ -8,7 +8,7 @@ namespace Simulation_Assignment
 {
     public abstract class simEvent: IComparable<simEvent>
     {
-        public enum EventType {ArrivalPassenger, Queue, ArrivalTram, DepartureTram, Switch };
+        public enum EventType {ArrivalPassenger, Queue, ArrivalTram, DepartureTram, Switch, Fifteen };
 
         protected EventType eventType;
         protected int _time;

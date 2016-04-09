@@ -11,9 +11,25 @@ namespace Simulation_Assignment
         private int _passengers;
         private int _station; //id of the station its at or on its way to the queue for
 
+
+        public void exitPassngers(int n)
+        {
+           _passengers -= n;
+        }
+
         public int ID
         {
             get { return _ID; }
+        }
+
+        public int spacesInTram
+        {
+            get { return 420 - _passengers; }
+        }
+
+        public int passengers
+        {
+            get { return _passengers; }
         }
     }
 }

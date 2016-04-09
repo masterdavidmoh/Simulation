@@ -21,7 +21,7 @@ namespace Simulation_Assignment
             simEvent currentEvent;
 
             // while there are events continue with the simulation
-            while(!queue.isEmpty())
+            while(!queue.isEmpty()) // probably change to EOS because of leftover events
             {
                 currentEvent = queue.pop();
                 simulationTime = currentEvent.time;
