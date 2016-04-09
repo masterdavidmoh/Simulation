@@ -32,7 +32,7 @@ namespace Simulation_Assignment
             t.exitPassngers(pout);
             int pin = s.getPassengersIn(t.spacesInTram);
 
-            state.simulationManager.addEvent(new simDepartureEvent(Convert.ToInt32(Math.Ceiling(12.5 + 0.22 * pin + 0.12 * pout)) + delay, _station, _tram));//TODO get dwell time time (probably from station)
+            state.simulationManager.addEvent(new simDepartureEvent(Convert.ToInt32(Math.Ceiling(12.5 + 0.22 * pin + 0.12 * pout)) + delay, _station, _tram));
         }
     }
 }
