@@ -12,6 +12,7 @@ namespace Simulation_Assignment
         protected int _ID;
         protected string _name;
         protected int _nextStationID;
+        protected int _traveToNext;
         protected bool _trainInStation;
         protected List<int> _departureQue;
         protected int _traveltTimeToNextStation;
@@ -25,9 +26,11 @@ namespace Simulation_Assignment
         //maybe add data for inter arival times
         //maybe add data for travel time to next station
 
-        public station(string name, string outputPrefix)
+        public station(string name, int nextStation, int travelTimeToNext, string outputPrefix)
         {
             _name = name;
+            _nextStationID = nextStation;
+            _traveToNext = travelTimeToNext;
             _swWaiting = new StreamWriter(outputPrefix + "_waiting_times_" + name + ".data");
 
             intervals = new List<Tuple<int, int>>();
@@ -54,7 +57,7 @@ namespace Simulation_Assignment
         {
             _trainInStation = true;
             //schedule arival event
-            simArrivalEvent e = new simArrivalEvent(0, _ID, tramID); //TODO get time to arive at the station
+            simArrivalEvent e = new simArrivalEvent(40, _ID, tramID); 
 
             state.simulationManager.addEvent(e);
         }
@@ -111,7 +114,7 @@ namespace Simulation_Assignment
                 _swWaiting.WriteLine(time.ToString() + " \t" + (time - _arrivalTimes[i]).ToString());
             }
 
-
+            _arrivalTimes.RemoveRange(0, entering);
 
                 return entering;
         }

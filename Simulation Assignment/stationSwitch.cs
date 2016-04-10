@@ -10,8 +10,9 @@ namespace Simulation_Assignment
         private bool _switchEmpty;
         private bool _trainInStation2;
 
-        public stationSwitch(string name, string outputPrefix)
-            :base(name, outputPrefix)
+
+        public stationSwitch(string name, int nextStation, int travelTimeToNext, string outputPrefix)
+            :base(name, nextStation, travelTimeToNext, outputPrefix)
         {
         }
 
