@@ -11,6 +11,15 @@ namespace Simulation_Assignment
         private bool _trainInStation2;
 
 
+        public override int turnTime(int tram, int time)
+        {
+            //TODO add check if the train is delayed
+            //check if the train is on time
+            return 4 * 60;
+            //otherwise 
+            return 3 * 60;
+        }
+
         /// <summary>
         /// checks if a train can arive at the station
         /// </summary>

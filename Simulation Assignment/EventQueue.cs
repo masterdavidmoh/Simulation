@@ -18,7 +18,7 @@ namespace Simulation_Assignment
         public void addEvent(simEvent e)
         {
             eventList.Add(e);
-            eventList.Sort((x, y) => x.time.CompareTo(y.time));
+            eventList.Sort();
         }
 
         /// <summary>

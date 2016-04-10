@@ -12,9 +12,14 @@ namespace Simulation_Assignment
         private int _station; //id of the station its at or on its way to the queue for
 
 
-        public void exitPassngers(int n)
+        public void exitPassengers(int n)
         {
            _passengers -= n;
+        }
+
+        public void addPassengers(int n)
+        {
+            _passengers += n;
         }
 
         public int ID

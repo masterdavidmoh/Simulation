@@ -16,8 +16,8 @@ namespace Simulation_Assignment
              * add random variables and distributions
              * add travel times to stations
              * parse travel times
-             * add output
-             * 
+             * add output depays
+             * add tram schedule
              * 
              * 
              */

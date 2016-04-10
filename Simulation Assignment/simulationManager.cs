@@ -8,12 +8,12 @@ namespace Simulation_Assignment
     public class simulationManager
     {
         private EventQueue queue;
-        int simulationTime;
+        int _simulationTime;
         simulationState _state;
 
         public simulationManager()
         {
-            simulationTime = 0;
+            _simulationTime = 0;
         }
 
         public void run()
@@ -24,7 +24,7 @@ namespace Simulation_Assignment
             while(!queue.isEmpty()) // probably change to EOS because of leftover events
             {
                 currentEvent = queue.pop();
-                simulationTime = currentEvent.time;
+                _simulationTime = currentEvent.time;
 
                 currentEvent.executeEvent(_state);
             }
@@ -33,6 +33,11 @@ namespace Simulation_Assignment
         public void addEvent(simEvent e)
         {
             queue.addEvent(e);
+        }
+
+        public int simulationTime
+        {
+            get { return _simulationTime; }
         }
 
     }

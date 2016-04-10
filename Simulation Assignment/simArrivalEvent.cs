@@ -9,18 +9,21 @@ namespace Simulation_Assignment
     {
         public int _station;
         public int _tram;
+        public int _doorFailPercentage;
 
-        public simArrivalEvent(int time, int stationID, int tramID)
+        public simArrivalEvent(int time, int stationID, int tramID, int doorFail)
             :base(EventType.ArrivalTram,time)
         {
             _station = stationID;
             _tram = tramID;
+            _doorFailPercentage = doorFail;
         }
 
         public override void executeEvent(simulationState state)
         {
             int delay = 0;
-            if (true != false)//if the door jams
+            //check if the door fails
+            if (true != false)//TODO add distribution for door fail
                 delay += 60; //add 60 second delay to the dwell time
 
             //12.5 + 0.22 pin+0.13 pout
@@ -28,11 +31,13 @@ namespace Simulation_Assignment
             tram t = state.getTram(_tram);
             station s = state.getStation(_station);
 
+            s.ariveTrain(state, _tram);
             int pout = s.getExiting(t.passengers);
-            t.exitPassngers(pout);
-            int pin = s.getPassengersIn(t.spacesInTram);
+            t.exitPassengers(pout);
+            int pin = s.getPassengersIn(t.spacesInTram, time);
+            t.addPassengers(pin);
 
-            state.simulationManager.addEvent(new simDepartureEvent(Convert.ToInt32(Math.Ceiling(12.5 + 0.22 * pin + 0.12 * pout)) + delay, _station, _tram));
+            state.simulationManager.addEvent(new simDepartureEvent(Math.Max(Convert.ToInt32(Math.Ceiling(12.5 + 0.22 * pin + 0.12 * pout))) + delay,s.turnTime(_tram,time)) , _station, _tram));
         }
     }
 }

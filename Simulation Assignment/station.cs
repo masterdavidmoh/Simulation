@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace Simulation_Assignment
 {
@@ -13,9 +14,17 @@ namespace Simulation_Assignment
         protected int _nextStationID;
         protected bool _trainInStation;
         protected List<int> _departureQue;
+        protected int _traveltTimeToNextStation;
+        protected StreamWriter swWaiting;
 
         //maybe add data for inter arival times
         //maybe add data for travel time to next station
+
+        public station(string name, string outputPrefix)
+        {
+            _name = name;
+            swWaiting = new StreamWriter(outputPrefix + "_waiting_times_" + name + ".data");
+        }
 
         /// <summary>
         /// checks if a train can arive at the station
@@ -39,6 +48,13 @@ namespace Simulation_Assignment
             simArrivalEvent e = new simArrivalEvent(0, _ID, tramID); //TODO get time to arive at the station
 
             state.simulationManager.addEvent(e);
+        }
+
+        public virtual void ariveTrain(simulationState state, int tramID)
+        {
+            //TODO implement expected arival times
+            //check arival time expected vs actual arival time
+            //write # seconds difference from expected time
         }
 
         /// <summary>
@@ -72,7 +88,7 @@ namespace Simulation_Assignment
         /// </summary>
         /// <param name="space">available space in the tram</param>
         /// <returns>the number of people entering the tram</returns>
-        public int getPassengersIn(int space)
+        public int getPassengersIn(int space, int time)
         {
             int entering;
             if (_arrivalTimes.Count() > space)
@@ -80,9 +96,15 @@ namespace Simulation_Assignment
             else
                 entering = _arrivalTimes.Count;
 
-            //add logic to process arival times to waiting times
+            //TODO add logic to process arival times to waiting times
+            for (int i = 0; i < entering; i++)
+            {
+                swWaiting.WriteLine(time.ToString() + " \t" + (time - _arrivalTimes[i]).ToString());
+            }
 
-            return entering;
+
+
+                return entering;
         }
 
         /// <summary>
@@ -93,6 +115,17 @@ namespace Simulation_Assignment
         public int getExiting(int max)
         {
             return Math.Min(0,max); //TODO add number of people exiting
+        }
+
+        /// <summary>
+        /// get the time required to turn the tram around
+        /// </summary>
+        /// <param name="tram">id of the tram</param>
+        /// <param name="time">the current time</param>
+        /// <returns>time required at this station to turn</returns>
+        public virtual int turnTime(int tram, int time)
+        {
+            return 0;
         }
 
         /// <summary>
@@ -122,6 +155,12 @@ namespace Simulation_Assignment
         public bool isDepartureQueueEmpty()
         {
             return _departureQue.Count == 0;
+        }
+
+        public int getTravelTime()
+        {
+            //TODO add distribution instead of static variable
+            return _traveltTimeToNextStation;
         }
 
         /// <summary>
