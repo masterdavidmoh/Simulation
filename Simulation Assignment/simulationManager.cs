@@ -14,6 +14,8 @@ namespace Simulation_Assignment
         public simulationManager()
         {
             _simulationTime = 0;
+            queue = new EventQueue();
+            _state = new simulationState(this);
         }
 
         public void run()

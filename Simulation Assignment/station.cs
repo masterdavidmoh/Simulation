@@ -15,7 +15,12 @@ namespace Simulation_Assignment
         protected bool _trainInStation;
         protected List<int> _departureQue;
         protected int _traveltTimeToNextStation;
-        protected StreamWriter swWaiting;
+        protected StreamWriter _swWaiting;
+        protected int _direction;
+        protected List<Tuple<int, int>> intervals;
+        protected Dictionary<Tuple<int, int>, int> inPassengers;
+        protected Dictionary<Tuple<int, int>, int> outPassengers;
+
 
         //maybe add data for inter arival times
         //maybe add data for travel time to next station
@@ -23,7 +28,11 @@ namespace Simulation_Assignment
         public station(string name, string outputPrefix)
         {
             _name = name;
-            swWaiting = new StreamWriter(outputPrefix + "_waiting_times_" + name + ".data");
+            _swWaiting = new StreamWriter(outputPrefix + "_waiting_times_" + name + ".data");
+
+            intervals = new List<Tuple<int, int>>();
+            inPassengers = new Dictionary<Tuple<int, int>, int>();
+            outPassengers = new Dictionary<Tuple<int, int>, int>();
         }
 
         /// <summary>
@@ -99,7 +108,7 @@ namespace Simulation_Assignment
             //TODO add logic to process arival times to waiting times
             for (int i = 0; i < entering; i++)
             {
-                swWaiting.WriteLine(time.ToString() + " \t" + (time - _arrivalTimes[i]).ToString());
+                _swWaiting.WriteLine(time.ToString() + " \t" + (time - _arrivalTimes[i]).ToString());
             }
 
 
@@ -164,6 +173,34 @@ namespace Simulation_Assignment
         }
 
         /// <summary>
+        /// adds a interval of ariving and exiting passengers
+        /// </summary>
+        /// <param name="interval">range of time</param>
+        /// <param name="pasin">entering passengers/hour</param>
+        /// <param name="pasout">exiting passngers/hour</param>
+        public void addInterval(Tuple<int,int> interval, int pasin, int pasout)
+        {
+            intervals.Add(interval);
+            inPassengers.Add(interval, pasin);
+            outPassengers.Add(interval, pasout);
+        }
+
+        /// <summary>
+        /// finds the interval a certain time lies in
+        /// </summary>
+        /// <param name="time">time to locate an interval for</param>
+        /// <returns>the found interval</returns>
+        private Tuple<int,int> findInterval(int time)
+        {
+            foreach(Tuple<int,int> i in intervals)
+            {
+                if (i.Item1 < time && i.Item2 > time)
+                    return i;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// gets the ID of this station
         /// </summary>
         public int ID
@@ -177,6 +214,22 @@ namespace Simulation_Assignment
         public int nextStation
         {
             get { return _nextStationID; }
+        }
+
+        /// <summary>
+        /// gets the name of the station
+        /// </summary>
+        public string name
+        {
+            get { return _name; }
+        }
+
+        /// <summary>
+        /// gets the direction of the station (0 == from uithof, 1 == to uithof)
+        /// </summary>
+        public int direction
+        {
+            get { return _direction; }
         }
     }
 }

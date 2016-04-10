@@ -11,12 +11,11 @@ namespace Simulation_Assignment
         public int _tram;
         public int _doorFailPercentage;
 
-        public simArrivalEvent(int time, int stationID, int tramID, int doorFail)
+        public simArrivalEvent(int time, int stationID, int tramID)
             :base(EventType.ArrivalTram,time)
         {
             _station = stationID;
             _tram = tramID;
-            _doorFailPercentage = doorFail;
         }
 
         public override void executeEvent(simulationState state)
@@ -37,7 +36,7 @@ namespace Simulation_Assignment
             int pin = s.getPassengersIn(t.spacesInTram, time);
             t.addPassengers(pin);
 
-            state.simulationManager.addEvent(new simDepartureEvent(Math.Max(Convert.ToInt32(Math.Ceiling(12.5 + 0.22 * pin + 0.12 * pout))) + delay,s.turnTime(_tram,time)) , _station, _tram));
+            state.simulationManager.addEvent(new simDepartureEvent(Math.Max(Convert.ToInt32(Math.Ceiling(12.5 + 0.22 * pin + 0.12 * pout)), s.turnTime(_tram,time)) + delay , _station, _tram));
         }
     }
 }

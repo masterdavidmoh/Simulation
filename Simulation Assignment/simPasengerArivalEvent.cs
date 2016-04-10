@@ -14,6 +14,7 @@ namespace Simulation_Assignment
             :base(EventType.ArrivalPassenger,time)
         {
             _station = stationID;
+            _scheduleTime = scheduleTime;
         }
 
         public override void executeEvent(simulationState state)
