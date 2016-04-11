@@ -20,6 +20,15 @@ namespace Simulation_Assignment
              * 
              * 
              */
+
+            // expected arival time at station x
+            // arrival time station x-1 + (dwell) 
+            //get next by taking the number of trains/hour
+
+            string[] stationNames = { };
+
+            //make one of each station we need and add them to the list
+
         }
 
         static List<station> parsePassengers(List<station> stations, string fileName)

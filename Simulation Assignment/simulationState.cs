@@ -14,12 +14,14 @@ namespace Simulation_Assignment
         private Dictionary<int,tram> _trams;
         private Dictionary<int, Queue<int>> _stationQueues;
         private simulationManager _manager;
+        private simRandom _r;
 
-        public simulationState(simulationManager manager)
+        public simulationState(simulationManager manager, int seed)
         {
             _manager = manager;
             _stations = new Dictionary<int,station>();
             _trams = new Dictionary<int,tram>();
+            _r = new simRandom(seed);
         }
 
         public simulationManager simulationManager
@@ -101,6 +103,11 @@ namespace Simulation_Assignment
             tram t;
             _trams.TryGetValue(ID, out t);
             return t;
+        }
+
+        public simRandom getRandom
+        {
+            get { return _r; }
         }
     }
 }

@@ -23,10 +23,11 @@ namespace Simulation_Assignment
             if (Math.Floor((time / 15.0)) != Math.Floor((_scheduleTime / 15.0)))
                 return;
 
+            station s = state.getStation(_station);
             //add current time to the station arival list
-            state.getStation(_station).addPassenger(_time);
+            s.addPassenger(_time);
             //schedule new pasenger arival 
-            state.simulationManager.addEvent(new simPasengerArivalEvent(0, _station, time)); //TODO get time from somewhere (probably station)
+            state.simulationManager.addEvent(new simPasengerArivalEvent(s.getInterArrivalTime(state,time), _station, time)); //TODO get time from somewhere (probably station)
         }
     }
 }

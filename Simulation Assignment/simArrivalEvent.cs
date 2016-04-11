@@ -21,13 +21,14 @@ namespace Simulation_Assignment
         public override void executeEvent(simulationState state)
         {
             int delay = 0;
+            tram t = state.getTram(_tram);
             //check if the door fails
-            if (true != false)//TODO add distribution for door fail
+            if (state.getRandom.getUniform(0,100) > t.doorJamChance)
                 delay += 60; //add 60 second delay to the dwell time
 
             //12.5 + 0.22 pin+0.13 pout
             //get passengers entering
-            tram t = state.getTram(_tram);
+            
             station s = state.getStation(_station);
 
             s.ariveTrain(state, _tram);

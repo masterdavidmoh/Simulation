@@ -55,13 +55,13 @@ namespace Simulation_Assignment
                 _trainInStation = true;
 
             //schedule arival event
-            simArrivalEvent e = new simArrivalEvent(0, _ID, tramID); //TODO get time to arive at the station
+            simArrivalEvent e = new simArrivalEvent(40, _ID, tramID);
 
             state.simulationManager.addEvent(e);
 
             _switchEmpty = false;
 
-            state.simulationManager.addEvent(new simSwitchEvent(0, _ID)); //TODO get time for switch to release 
+            state.simulationManager.addEvent(new simSwitchEvent(40, _ID));
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Simulation_Assignment
                 _trainInStation2 = false;
 
             _switchEmpty = false;
-            state.simulationManager.addEvent(new simSwitchEvent(0, _ID)); //TODO get time for switch to release 
+            state.simulationManager.addEvent(new simSwitchEvent(40, _ID));
 
         }
 

@@ -8,6 +8,8 @@ namespace Simulation_Assignment
 {
     public class station
     {
+        public enum stationDist { gamma, exponential };
+
         protected List<int> _arrivalTimes;
         protected int _ID;
         protected string _name;
@@ -21,6 +23,8 @@ namespace Simulation_Assignment
         protected List<Tuple<int, int>> intervals;
         protected Dictionary<Tuple<int, int>, int> inPassengers;
         protected Dictionary<Tuple<int, int>, int> outPassengers;
+        protected stationDist inDist;
+        protected stationDist outDist;
 
 
         //maybe add data for inter arival times
@@ -108,7 +112,6 @@ namespace Simulation_Assignment
             else
                 entering = _arrivalTimes.Count;
 
-            //TODO add logic to process arival times to waiting times
             for (int i = 0; i < entering; i++)
             {
                 _swWaiting.WriteLine(time.ToString() + " \t" + (time - _arrivalTimes[i]).ToString());
@@ -124,9 +127,22 @@ namespace Simulation_Assignment
         /// </summary>
         /// <param name="max">maximum number of people that can exit</param>
         /// <returns>the number of people leaving the tram</returns>
-        public int getExiting(int max)
+        public int getExiting(int max, int time, simulationState state)
         {
-            return Math.Min(0,max); //TODO add number of people exiting
+            if(lastStation)
+                return max;
+            
+            double passengers;
+            int exiting = outPassengers[findInterval(time)];
+
+            if(outDist == stationDist.exponential)
+            {
+                passengers = state.getRandom.getExponential(exiting);
+            }
+            else
+                passengers = state.getRandom.getGamma(exiting,1.0)//TODO add alpha
+            
+            return Math.Min(Convert.ToInt32(passengers) ,max); 
         }
 
         /// <summary>
@@ -169,10 +185,25 @@ namespace Simulation_Assignment
             return _departureQue.Count == 0;
         }
 
+        /// <summary>
+        /// get the travel time to the next station
+        /// </summary>
+        /// <returns>travel time to the next station</returns>
         public int getTravelTime()
         {
             //TODO add distribution instead of static variable
             return _traveltTimeToNextStation;
+        }
+
+        public double getInterArrivalTime(simulationState state, int time)
+        {
+            //have # per hour
+            int passengers = inPassengers[findInterval(time)];
+
+            if (inDist == stationDist.exponential)
+                return state.getRandom.getExponential(passengers);
+            else
+                return state.getRandom.getGamma(passengers, 1.0); //TODO add gamma alpha 
         }
 
         /// <summary>

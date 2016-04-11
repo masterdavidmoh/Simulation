@@ -11,11 +11,11 @@ namespace Simulation_Assignment
         int _simulationTime;
         simulationState _state;
 
-        public simulationManager()
+        public simulationManager(int seed)
         {
             _simulationTime = 0;
             queue = new EventQueue();
-            _state = new simulationState(this);
+            _state = new simulationState(this, seed);
         }
 
         public void run()

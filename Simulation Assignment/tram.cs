@@ -10,7 +10,13 @@ namespace Simulation_Assignment
         private int _ID;
         private int _passengers;
         private int _station; //id of the station its at or on its way to the queue for
+        private int _doorJamChance;
 
+        public tram(int id, int doorJamChance)
+        {
+            _ID = id;
+            _doorJamChance = doorJamChance;
+        }
 
         public void exitPassengers(int n)
         {
@@ -35,6 +41,11 @@ namespace Simulation_Assignment
         public int passengers
         {
             get { return _passengers; }
+        }
+
+        public int doorJamChance
+        {
+            get { return _doorJamChance; }
         }
     }
 }

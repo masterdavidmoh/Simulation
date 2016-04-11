@@ -22,7 +22,7 @@ namespace Simulation_Assignment.Simulation_Assignment
             while (s != null)
             {
                 //schedule new pasenger arival 
-                state.simulationManager.addEvent(new simPasengerArivalEvent(0, i, time)); //TODO get time from somewhere (probably station)
+                state.simulationManager.addEvent(new simPasengerArivalEvent(s.getInterArrivalTime(state,time), i, time)); 
 
                 i++;
                 s = state.getStation(i);
