@@ -6,9 +6,10 @@ using System.IO;
 
 namespace Simulation_Assignment
 {
+    public enum stationDist { gamma, exponential };
+
     public class station
     {
-        public enum stationDist { gamma, exponential };
 
         protected List<int> _arrivalTimes;
         protected int _ID;
@@ -25,8 +26,10 @@ namespace Simulation_Assignment
         protected List<Tuple<int, int>> intervals;
         protected Dictionary<Tuple<int, int>, double> inPassengers;
         protected Dictionary<Tuple<int, int>, double> outPassengers;
-        protected stationDist inDist;
-        protected stationDist outDist;
+        protected stationDist _inDist;
+        protected stationDist _outDist;
+        protected double _inAlpha;
+        protected double _outAlpha;
         protected bool _lastStation;
         protected int _trainsPerHour;
         protected int _nextTrain;
@@ -36,9 +39,10 @@ namespace Simulation_Assignment
         //maybe add data for inter arival times
         //maybe add data for travel time to next station
 
-        public station(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction)
+        public station(string name, int id, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction, stationDist inDist, double inAlpha, stationDist outDist, double outalpha)
         {
             _name = name;
+            _ID = id;
             _nextStationID = nextStation;
             _traveToNext = travelTimeToNext;
             _swWaiting = new StreamWriter(outputPrefix + "_waiting_times_" + name + direction.ToString() + ".data");
@@ -49,6 +53,11 @@ namespace Simulation_Assignment
             _nextTrain = timeOffset;
             _direction = direction;
             _arrivalTimes = new List<int>();
+            _departureQue = new List<int>();
+            _inDist = inDist;
+            _outDist = outDist;
+            _inAlpha = inAlpha;
+            _outAlpha = outalpha;
 
             intervals = new List<Tuple<int, int>>();
             intervals.Add(new Tuple<int, int>(int.MinValue, 0));
@@ -141,7 +150,7 @@ namespace Simulation_Assignment
         public int getPassengersIn(int space, int time)
         {
             int entering;
-            if (_arrivalTimes.Count() > space)
+            if (_arrivalTimes.Count > space)
                 entering = space;
             else
                 entering = _arrivalTimes.Count;
@@ -170,7 +179,7 @@ namespace Simulation_Assignment
             double passengers;
             double exiting = outPassengers[findInterval(time)];
 
-            if (outDist == stationDist.exponential)
+            if (_outDist == stationDist.exponential)
             {
                 passengers = state.getRandom.getExponential(exiting);
             }
@@ -179,7 +188,7 @@ namespace Simulation_Assignment
                 if (exiting == 0.0)
                     passengers = 0;
                 else
-                    passengers = state.getRandom.getGamma(exiting, 1.0);//TODO add alpha
+                    passengers = state.getRandom.getGamma(exiting, _outAlpha);//TODO add alpha
             }
             
             return Math.Min(Convert.ToInt32(passengers) ,max); 
@@ -239,13 +248,20 @@ namespace Simulation_Assignment
 
         public double getInterArrivalTime(simulationState state, int time)
         {
+            
             //have # per hour
             //arivals / hours = _arivalRate
             // time between arivals in hours is 1/ arivals / hour == hour/arival
             // hour/arival * 3600 = seconds/arival
             if (_arrivalRate <= 0.0)
                 return -1.0;
-            return state.getRandom.getExponential( 3600 / _arrivalRate);
+            double result = state.getRandom.getExponential( 3600 / _arrivalRate);
+
+            // make sure we dont return some arbitrary large value that overflows integers
+            if(result > 7200.0)
+                return 7200.0;
+
+            return result;
 
         }
 
@@ -261,10 +277,10 @@ namespace Simulation_Assignment
                 return;
             }
 
-            if (inDist == stationDist.exponential)
+            if (_inDist == stationDist.exponential)
                 _arrivalRate = state.getRandom.getExponential(passengers);
             else
-                _arrivalRate = state.getRandom.getGamma(passengers, 1.0); //TODO add gamma alpha 
+                _arrivalRate = state.getRandom.getGamma(1/passengers, _inAlpha); //TODO add gamma alpha 
         
         }
 
@@ -290,7 +306,7 @@ namespace Simulation_Assignment
         {
             foreach(Tuple<int,int> i in intervals)
             {
-                if (i.Item1 < time-_offset && i.Item2 > time-_offset)
+                if (i.Item1 <= time-_offset && i.Item2 > time-_offset)
                     return i;
             }
             return intervals[0];

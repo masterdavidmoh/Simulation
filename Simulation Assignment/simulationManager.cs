@@ -28,6 +28,8 @@ namespace Simulation_Assignment
                 currentEvent = queue.pop();
                 _simulationTime = currentEvent.time;
 
+                Console.WriteLine(_simulationTime + ": " + currentEvent.type);
+
                 currentEvent.executeEvent(_state);
             }
         }

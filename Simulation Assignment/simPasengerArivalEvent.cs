@@ -20,7 +20,7 @@ namespace Simulation_Assignment
         public override void executeEvent(simulationState state)
         {
             //find if time is not in the same 15 min timeframe as schedule time, return as we have a new event
-            if (Math.Floor((time / 15.0)) != Math.Floor((_scheduleTime / 15.0)))
+            if (Math.Floor((time / (15.0*60))) != Math.Floor((_scheduleTime / (15.0*60))))
                 return;
 
             station s = state.getStation(_station);

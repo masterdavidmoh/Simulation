@@ -26,7 +26,7 @@ namespace Simulation_Assignment
 
         public double getExponential(double mean)
         {
-            exD.Lambda = (1.0 / mean);
+            exD.Lambda = (1.0/ mean);
             return exD.NextDouble();
             //return Math.Log(1.0 - _r.NextDouble()) / (-(1 / mean));
         }

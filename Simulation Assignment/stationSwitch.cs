@@ -12,9 +12,10 @@ namespace Simulation_Assignment
 
         //public station(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
 
-        public stationSwitch(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction)
-            :base(name, nextStation, travelTimeToNext, timeOffset, trainsPerHour, lastStation, outputPrefix, direction)
+        public stationSwitch(string name, int id, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction, stationDist inDist, double inAlpha, stationDist outDist, double outalpha)
+            :base(name, id, nextStation, travelTimeToNext, timeOffset, trainsPerHour, lastStation, outputPrefix, 2, inDist, inAlpha, outDist, outalpha)
         {
+            _switchEmpty = true;
         }
 
 
@@ -89,7 +90,7 @@ namespace Simulation_Assignment
                 _trainInStation2 = false;
 
             _switchEmpty = false;
-            state.simulationManager.addEvent(new simSwitchEvent(40, _ID));
+            state.simulationManager.addEvent(new simSwitchEvent(state.simulationManager.simulationTime + 40, _ID));
 
             //update the time for the next train
             int time = state.simulationManager.simulationTime;

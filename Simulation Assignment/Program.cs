@@ -29,10 +29,15 @@ namespace Simulation_Assignment
 
             Directory.CreateDirectory("./output");
 
-            simulationManager simManager = new simulationManager(42);
+            simulationManager simManager = new simulationManager(743269);
 
             int nextStation = 0;
             int[] travelTimes = { 110, 78, 82, 60, 100, 59, 243, 135, 134, 243, 59, 101, 60, 86, 78, 113, 0};
+            double[] inAlphas = { 0.0, 0.0, 0.0, 1.9874, 1.644, 0.0, 1.3491, 0.0, 1.7064, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+            double[] outAlphas = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.2593, 1.7085, 0.0, 0.0, 0.0 };
+            stationDist[] inDists = { stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.gamma, stationDist.gamma, stationDist.exponential, stationDist.gamma, stationDist.exponential, stationDist.gamma, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential };
+            stationDist[] outDist = { stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.gamma, stationDist.gamma, stationDist.exponential, stationDist.exponential, stationDist.exponential };
+
             int offset = 0;
             int trainsPerHour = 4;
             int direction = 0;
@@ -53,19 +58,18 @@ namespace Simulation_Assignment
 
                 if (stationNames[k] == "Centraal Station Centrumzijde")
                 {
-                    stations.Add(k,new stationSwitch(stationNames[k], nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction));
+                    stations.Add(k, new stationSwitch(stationNames[k], k, nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction, inDists[k], inAlphas[k], outDist[k], outAlphas[k]));
                     direction = 1;
                     switchIndex = k;
                     continue;
                 }
 
                 //string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
-                stations.Add(k,new station(stationNames[k], nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction));
+                stations.Add(k ,new station(stationNames[k], k, nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction, inDists[k], inAlphas[k], outDist[k], outAlphas[k]));
             }
 
             parsePassengers(stations, "input-data-passengers-01.csv");
-            stations[switchIndex].direction = 1;
-            parsePassengers(stations, "input-data-passengers-01-2.csv");
+            //parsePassengers(stations, "input-data-passengers-01-2.csv");
 
             Console.WriteLine("creating trams");
             //create queue events for all trains + train objects
@@ -118,6 +122,8 @@ namespace Simulation_Assignment
             Console.WriteLine("done setting up simulating");
 
             simManager.run();
+
+            Console.ReadLine();
         }
 
         static void parsePassengers(Dictionary<int,station> stations, string fileName)
@@ -135,7 +141,7 @@ namespace Simulation_Assignment
                 splitData = data.Split(new char[] {';'});
                 for (int i = 0; i < stations.Count; i++)
                 {
-                    if (stations[i].name == splitData[0] && stations[i].direction == Convert.ToInt32(splitData[1]))
+                    if (stations[i].name == splitData[0] && (stations[i].direction == Convert.ToInt32(splitData[1])||stations[i].direction ==2))
                     {
                         s = stations[i];
                         break;
@@ -148,7 +154,7 @@ namespace Simulation_Assignment
                     passengersIn = Convert.ToDouble(splitData[4]);
                     passengersOut = Convert.ToDouble(splitData[5]);
 
-                    s.addInterval(interval, passengersIn, passengersOut, s.direction);
+                    s.addInterval(interval, passengersIn, passengersOut, Convert.ToInt32(splitData[1]));
                 }
                 s = null;
                 data = sr.ReadLine();

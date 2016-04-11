@@ -33,5 +33,10 @@ namespace Simulation_Assignment
         {
             get{return this._time;}
         }
+
+        public EventType type
+        {
+            get { return eventType; }
+        }
     }
 }

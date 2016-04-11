@@ -37,7 +37,7 @@ namespace Simulation_Assignment
             int pin = s.getPassengersIn(t.spacesInTram, time);
             t.addPassengers(pin);
 
-            state.simulationManager.addEvent(new simDepartureEvent(Math.Max(Convert.ToInt32(Math.Ceiling(12.5 + 0.22 * pin + 0.12 * pout)), s.turnTime(_tram,time)) + delay , _station, _tram));
+            state.simulationManager.addEvent(new simDepartureEvent(time + Math.Max(Convert.ToInt32(Math.Ceiling(12.5 + 0.22 * pin + 0.12 * pout)), s.turnTime(_tram,time)) + delay , _station, _tram));
         }
     }
 }
