@@ -27,7 +27,7 @@ namespace Simulation_Assignment
                 //if so schedule a departure event for that train
                 int t = s.popDepartureQueue();
                 s.departTrain(state);
-                state.simulationManager.addEvent(new simDepartureEvent(0, _station, t));
+                state.simulationManager.addEvent(new simDepartureEvent(state.simulationManager.simulationTime, _station, t));
             }
             //else check if there is a train in the queue that can arive
             else if(sq.Count > 0)

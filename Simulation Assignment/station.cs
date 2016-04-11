@@ -23,8 +23,8 @@ namespace Simulation_Assignment
         protected StreamWriter _swPunctual;
         protected int _direction;
         protected List<Tuple<int, int>> intervals;
-        protected Dictionary<Tuple<int, int>, int> inPassengers;
-        protected Dictionary<Tuple<int, int>, int> outPassengers;
+        protected Dictionary<Tuple<int, int>, double> inPassengers;
+        protected Dictionary<Tuple<int, int>, double> outPassengers;
         protected stationDist inDist;
         protected stationDist outDist;
         protected bool _lastStation;
@@ -36,27 +36,35 @@ namespace Simulation_Assignment
         //maybe add data for inter arival times
         //maybe add data for travel time to next station
 
-        public station(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
+        public station(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction)
         {
             _name = name;
             _nextStationID = nextStation;
             _traveToNext = travelTimeToNext;
-            _swWaiting = new StreamWriter(outputPrefix + "_waiting_times_" + name + ".data");
-            _swPunctual = new StreamWriter(outputPrefix + "_punctuality_" + name + ".data");
+            _swWaiting = new StreamWriter(outputPrefix + "_waiting_times_" + name + direction.ToString() + ".data");
+            _swPunctual = new StreamWriter(outputPrefix + "_punctuality_" + name + direction.ToString() + ".data");
             _offset = timeOffset;
             _lastStation = lastStation;
             _trainsPerHour = trainsPerHour;
             _nextTrain = timeOffset;
+            _direction = direction;
+            _arrivalTimes = new List<int>();
 
             intervals = new List<Tuple<int, int>>();
-            inPassengers = new Dictionary<Tuple<int, int>, int>();
-            outPassengers = new Dictionary<Tuple<int, int>, int>();
+            intervals.Add(new Tuple<int, int>(int.MinValue, 0));
+            intervals.Add(new Tuple<int, int>(Convert.ToInt32(15.5 * 3600), int.MaxValue));
+            inPassengers = new Dictionary<Tuple<int, int>, double>();
+            inPassengers.Add(new Tuple<int, int>(int.MinValue, 0), 0);
+            inPassengers.Add(new Tuple<int, int>(Convert.ToInt32(15.5 * 3600), int.MaxValue), 0);
+            outPassengers = new Dictionary<Tuple<int, int>, double>();
+            outPassengers.Add(new Tuple<int, int>(int.MinValue, 0), 0);
+            outPassengers.Add(new Tuple<int, int>(Convert.ToInt32(15.5 * 3600), int.MaxValue), 0);
         }
 
         ~station()
         {
-            _swPunctual.Close();
-            _swWaiting.Close();
+            //_swPunctual.Close();
+            //_swWaiting.Close();
         }
 
         /// <summary>
@@ -78,7 +86,7 @@ namespace Simulation_Assignment
         {
             _trainInStation = true;
             //schedule arival event
-            simArrivalEvent e = new simArrivalEvent(40, _ID, tramID); 
+            simArrivalEvent e = new simArrivalEvent(state.simulationManager.simulationTime + 40, _ID, tramID); 
 
             state.simulationManager.addEvent(e);
         }
@@ -89,6 +97,7 @@ namespace Simulation_Assignment
 
             //write # seconds difference from expected time
             _swPunctual.WriteLine(_nextTrain - state.simulationManager.simulationTime);
+            _swPunctual.Flush();
         }
 
         /// <summary>
@@ -140,6 +149,7 @@ namespace Simulation_Assignment
             for (int i = 0; i < entering; i++)
             {
                 _swWaiting.WriteLine(time.ToString() + " \t" + (time - _arrivalTimes[i]).ToString());
+                _swWaiting.Flush();
             }
 
             _arrivalTimes.RemoveRange(0, entering);
@@ -158,14 +168,19 @@ namespace Simulation_Assignment
                 return max;
             
             double passengers;
-            int exiting = outPassengers[findInterval(time)];
+            double exiting = outPassengers[findInterval(time)];
 
             if (outDist == stationDist.exponential)
             {
                 passengers = state.getRandom.getExponential(exiting);
             }
             else
-                passengers = state.getRandom.getGamma(exiting, 1.0);//TODO add alpha
+            {
+                if (exiting == 0.0)
+                    passengers = 0;
+                else
+                    passengers = state.getRandom.getGamma(exiting, 1.0);//TODO add alpha
+            }
             
             return Math.Min(Convert.ToInt32(passengers) ,max); 
         }
@@ -217,7 +232,7 @@ namespace Simulation_Assignment
         public int getTravelTime(simulationState state )
         {
             //alpha 34.784 en beta 0.0287
-            double multiplier = state.getRandom.getGamma(34.784, 0.0287);
+            double multiplier = state.getRandom.getGamma(1.0/0.0287, 34.784);
 
             return Convert.ToInt32(_traveltTimeToNextStation * multiplier);
         }
@@ -228,7 +243,8 @@ namespace Simulation_Assignment
             //arivals / hours = _arivalRate
             // time between arivals in hours is 1/ arivals / hour == hour/arival
             // hour/arival * 3600 = seconds/arival
-
+            if (_arrivalRate <= 0.0)
+                return -1.0;
             return state.getRandom.getExponential( 3600 / _arrivalRate);
 
         }
@@ -237,7 +253,13 @@ namespace Simulation_Assignment
 
         public void updateArivalRate(int time, simulationState state)
         {
-            int passengers = inPassengers[findInterval(time)];
+            double passengers = inPassengers[findInterval(time)];
+
+            if (passengers <= 0.0)
+            {
+                _arrivalRate = -1.0;
+                return;
+            }
 
             if (inDist == stationDist.exponential)
                 _arrivalRate = state.getRandom.getExponential(passengers);
@@ -252,7 +274,7 @@ namespace Simulation_Assignment
         /// <param name="interval">range of time</param>
         /// <param name="pasin">entering passengers/hour</param>
         /// <param name="pasout">exiting passngers/hour</param>
-        public void addInterval(Tuple<int,int> interval, int pasin, int pasout)
+        public virtual void addInterval(Tuple<int,int> interval, double pasin, double pasout, int direction)
         {
             intervals.Add(interval);
             inPassengers.Add(interval, pasin);
@@ -304,6 +326,7 @@ namespace Simulation_Assignment
         public int direction
         {
             get { return _direction; }
+            set { _direction = value; }
         }
     }
 }

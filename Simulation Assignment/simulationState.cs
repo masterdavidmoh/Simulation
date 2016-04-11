@@ -21,6 +21,7 @@ namespace Simulation_Assignment
             _manager = manager;
             _stations = new Dictionary<int,station>();
             _trams = new Dictionary<int,tram>();
+            _stationQueues = new Dictionary<int, Queue<int>>();
             _r = new simRandom(seed);
         }
 
@@ -108,6 +109,23 @@ namespace Simulation_Assignment
         public simRandom getRandom
         {
             get { return _r; }
+        }
+
+        public Dictionary<int,station> stations
+        {
+            set
+            {
+                _stations = value;
+                for (int i = 0; i < _stations.Count; i++)
+                {
+                    _stationQueues.Add(i,new Queue<int>());
+                }
+            }
+        }
+
+        public Dictionary<int,tram> trams
+        {
+            set { _trams = value; }
         }
     }
 }

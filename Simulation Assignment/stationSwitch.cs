@@ -12,8 +12,8 @@ namespace Simulation_Assignment
 
         //public station(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
 
-        public stationSwitch(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
-            :base(name, nextStation, travelTimeToNext, timeOffset, trainsPerHour, lastStation, outputPrefix)
+        public stationSwitch(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction)
+            :base(name, nextStation, travelTimeToNext, timeOffset, trainsPerHour, lastStation, outputPrefix, direction)
         {
         }
 
@@ -57,13 +57,13 @@ namespace Simulation_Assignment
                 _trainInStation = true;
 
             //schedule arival event
-            simArrivalEvent e = new simArrivalEvent(40, _ID, tramID);
+            simArrivalEvent e = new simArrivalEvent(state.simulationManager.simulationTime + 40, _ID, tramID);
 
             state.simulationManager.addEvent(e);
 
             _switchEmpty = false;
 
-            state.simulationManager.addEvent(new simSwitchEvent(40, _ID));
+            state.simulationManager.addEvent(new simSwitchEvent(state.simulationManager.simulationTime + 40, _ID));
         }
 
         /// <summary>
@@ -99,6 +99,16 @@ namespace Simulation_Assignment
             else
                 _nextTrain = _nextTrain + Convert.ToInt32(3600.0 / _trainsPerHour);
 
+        }
+
+        public override void addInterval(Tuple<int, int> interval, double pasin, double pasout, int direction)
+        {
+            intervals.Add(interval);
+            if(direction == 0)
+                outPassengers.Add(interval, pasout);
+            else
+                inPassengers.Add(interval, pasin);
+            
         }
 
         public bool switchEmpty

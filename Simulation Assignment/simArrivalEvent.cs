@@ -23,7 +23,7 @@ namespace Simulation_Assignment
             int delay = 0;
             tram t = state.getTram(_tram);
             //check if the door fails
-            if (state.getRandom.getUniform(0,100) > t.doorJamChance)
+            if (state.getRandom.getUniform(0,100) < t.doorJamChance)
                 delay += 60; //add 60 second delay to the dwell time
 
             //12.5 + 0.22 pin+0.13 pout

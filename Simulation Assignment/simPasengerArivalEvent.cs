@@ -27,7 +27,8 @@ namespace Simulation_Assignment
             //add current time to the station arival list
             s.addPassenger(_time);
             //schedule new pasenger arival 
-            state.simulationManager.addEvent(new simPasengerArivalEvent(time + Convert.ToInt32(s.getInterArrivalTime(state, time)), _station, time)); 
+            if (s.getInterArrivalTime(state, time) != -1.0)
+                state.simulationManager.addEvent(new simPasengerArivalEvent(time + Convert.ToInt32(s.getInterArrivalTime(state, time)), _station, time)); 
         }
     }
 }

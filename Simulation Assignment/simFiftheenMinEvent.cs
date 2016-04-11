@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Simulation_Assignment.Simulation_Assignment
+namespace Simulation_Assignment
 {
     class simFiftheenMinEvent:simEvent
     {
@@ -21,14 +21,16 @@ namespace Simulation_Assignment.Simulation_Assignment
 
             while (s != null)
             {
+                s.updateArivalRate(time,state);
                 //schedule new pasenger arival 
-                state.simulationManager.addEvent(new simPasengerArivalEvent(time + Convert.ToInt32(s.getInterArrivalTime(state,time)), i, time)); 
+                if (s.getInterArrivalTime(state, time) > 0.0)
+                    state.simulationManager.addEvent(new simPasengerArivalEvent(time + Convert.ToInt32(s.getInterArrivalTime(state,time)), i, time)); 
 
                 i++;
                 s = state.getStation(i);
             }
-
-            state.simulationManager.addEvent(new simFiftheenMinEvent(time + (15 * 60)));
+            if (time <= 77400)
+                state.simulationManager.addEvent(new simFiftheenMinEvent(time + (15 * 60)));
         }
     }
 }
