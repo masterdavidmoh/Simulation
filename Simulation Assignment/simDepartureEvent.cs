@@ -27,7 +27,8 @@ namespace Simulation_Assignment
                 s.departTrain(state);
 
                 //schedule queue event
-                state.simulationManager.addEvent(new simQueueEvent(s.getTravelTime(), s.nextStation, _tram));
+                if(s.nextStation != -1)
+                    state.simulationManager.addEvent(new simQueueEvent(s.getTravelTime(state), s.nextStation, _tram));
 
                 //check if this stations queue is empty
                 if (sq.Count > 0)

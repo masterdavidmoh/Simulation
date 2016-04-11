@@ -18,28 +18,45 @@ namespace Simulation_Assignment
         protected bool _trainInStation;
         protected List<int> _departureQue;
         protected int _traveltTimeToNextStation;
+        protected int _offset;
         protected StreamWriter _swWaiting;
+        protected StreamWriter _swPunctual;
         protected int _direction;
         protected List<Tuple<int, int>> intervals;
         protected Dictionary<Tuple<int, int>, int> inPassengers;
         protected Dictionary<Tuple<int, int>, int> outPassengers;
         protected stationDist inDist;
         protected stationDist outDist;
+        protected bool _lastStation;
+        protected int _trainsPerHour;
+        protected int _nextTrain;
+        protected double _arrivalRate;
 
 
         //maybe add data for inter arival times
         //maybe add data for travel time to next station
 
-        public station(string name, int nextStation, int travelTimeToNext, string outputPrefix)
+        public station(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
         {
             _name = name;
             _nextStationID = nextStation;
             _traveToNext = travelTimeToNext;
             _swWaiting = new StreamWriter(outputPrefix + "_waiting_times_" + name + ".data");
+            _swPunctual = new StreamWriter(outputPrefix + "_punctuality_" + name + ".data");
+            _offset = timeOffset;
+            _lastStation = lastStation;
+            _trainsPerHour = trainsPerHour;
+            _nextTrain = timeOffset;
 
             intervals = new List<Tuple<int, int>>();
             inPassengers = new Dictionary<Tuple<int, int>, int>();
             outPassengers = new Dictionary<Tuple<int, int>, int>();
+        }
+
+        ~station()
+        {
+            _swPunctual.Close();
+            _swWaiting.Close();
         }
 
         /// <summary>
@@ -68,9 +85,10 @@ namespace Simulation_Assignment
 
         public virtual void ariveTrain(simulationState state, int tramID)
         {
-            //TODO implement expected arival times
             //check arival time expected vs actual arival time
+
             //write # seconds difference from expected time
+            _swPunctual.WriteLine(_nextTrain - state.simulationManager.simulationTime);
         }
 
         /// <summary>
@@ -88,6 +106,13 @@ namespace Simulation_Assignment
         public virtual void departTrain(simulationState state)
         {
             _trainInStation = false;
+            //update the time for the next train
+            int time = state.simulationManager.simulationTime;
+            //if we are before 7am or after 7 pm set rate to 4 trams
+            if (time - _offset < 3600 || time - _offset > 3600 * 13)
+                _nextTrain = Convert.ToInt32(_nextTrain + 3600 / 4.0);
+            else
+                _nextTrain = Convert.ToInt32(_nextTrain + 3600 / _trainsPerHour);
         }
 
         /// <summary>
@@ -129,18 +154,18 @@ namespace Simulation_Assignment
         /// <returns>the number of people leaving the tram</returns>
         public int getExiting(int max, int time, simulationState state)
         {
-            if(lastStation)
+            if(_lastStation)
                 return max;
             
             double passengers;
             int exiting = outPassengers[findInterval(time)];
 
-            if(outDist == stationDist.exponential)
+            if (outDist == stationDist.exponential)
             {
                 passengers = state.getRandom.getExponential(exiting);
             }
             else
-                passengers = state.getRandom.getGamma(exiting,1.0)//TODO add alpha
+                passengers = state.getRandom.getGamma(exiting, 1.0);//TODO add alpha
             
             return Math.Min(Convert.ToInt32(passengers) ,max); 
         }
@@ -189,21 +214,36 @@ namespace Simulation_Assignment
         /// get the travel time to the next station
         /// </summary>
         /// <returns>travel time to the next station</returns>
-        public int getTravelTime()
+        public int getTravelTime(simulationState state )
         {
-            //TODO add distribution instead of static variable
-            return _traveltTimeToNextStation;
+            //alpha 34.784 en beta 0.0287
+            double multiplier = state.getRandom.getGamma(34.784, 0.0287);
+
+            return Convert.ToInt32(_traveltTimeToNextStation * multiplier);
         }
 
         public double getInterArrivalTime(simulationState state, int time)
         {
             //have # per hour
+            //arivals / hours = _arivalRate
+            // time between arivals in hours is 1/ arivals / hour == hour/arival
+            // hour/arival * 3600 = seconds/arival
+
+            return state.getRandom.getExponential( 3600 / _arrivalRate);
+
+        }
+
+            
+
+        public void updateArivalRate(int time, simulationState state)
+        {
             int passengers = inPassengers[findInterval(time)];
 
             if (inDist == stationDist.exponential)
-                return state.getRandom.getExponential(passengers);
+                _arrivalRate = state.getRandom.getExponential(passengers);
             else
-                return state.getRandom.getGamma(passengers, 1.0); //TODO add gamma alpha 
+                _arrivalRate = state.getRandom.getGamma(passengers, 1.0); //TODO add gamma alpha 
+        
         }
 
         /// <summary>
@@ -228,10 +268,10 @@ namespace Simulation_Assignment
         {
             foreach(Tuple<int,int> i in intervals)
             {
-                if (i.Item1 < time && i.Item2 > time)
+                if (i.Item1 < time-_offset && i.Item2 > time-_offset)
                     return i;
             }
-            return null;
+            return intervals[0];
         }
 
         /// <summary>

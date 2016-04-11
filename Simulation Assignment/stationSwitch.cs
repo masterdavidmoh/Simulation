@@ -10,20 +10,22 @@ namespace Simulation_Assignment
         private bool _switchEmpty;
         private bool _trainInStation2;
 
+        //public station(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
 
-        public stationSwitch(string name, int nextStation, int travelTimeToNext, string outputPrefix)
-            :base(name, nextStation, travelTimeToNext, outputPrefix)
+        public stationSwitch(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
+            :base(name, nextStation, travelTimeToNext, timeOffset, trainsPerHour, lastStation, outputPrefix)
         {
         }
 
 
         public override int turnTime(int tram, int time)
         {
-            //TODO add check if the train is delayed
             //check if the train is on time
-            return 4 * 60;
+            if(time <= _nextTrain)
+                return 4 * 60;
             //otherwise 
-            return 3 * 60;
+            else
+                return 3 * 60;
         }
 
         /// <summary>
@@ -88,6 +90,14 @@ namespace Simulation_Assignment
 
             _switchEmpty = false;
             state.simulationManager.addEvent(new simSwitchEvent(40, _ID));
+
+            //update the time for the next train
+            int time = state.simulationManager.simulationTime;
+            //if we are before 7am or after 7 pm set rate to 4 trams
+            if (time - _offset < 3600 || time - _offset > 3600 * 13)
+                _nextTrain = _nextTrain + Convert.ToInt32(3600.0 / 4.0);
+            else
+                _nextTrain = _nextTrain + Convert.ToInt32(3600.0 / _trainsPerHour);
 
         }
 

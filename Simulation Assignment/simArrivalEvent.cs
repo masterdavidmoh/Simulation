@@ -32,7 +32,7 @@ namespace Simulation_Assignment
             station s = state.getStation(_station);
 
             s.ariveTrain(state, _tram);
-            int pout = s.getExiting(t.passengers);
+            int pout = s.getExiting(t.passengers,time,state);
             t.exitPassengers(pout);
             int pin = s.getPassengersIn(t.spacesInTram, time);
             t.addPassengers(pin);

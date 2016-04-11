@@ -14,10 +14,7 @@ namespace Simulation_Assignment
 
             /*
              * TODO lijst:
-             * add random variables and distributions
-             * add output depays
-             * add tram schedule
-             * 
+             * add random variables and distributions mostly done
              * 
              */
 
@@ -64,7 +61,7 @@ namespace Simulation_Assignment
 
                 data = sr.ReadLine();
             }
-
+            sr.Close();
             return stations;
         }
     }

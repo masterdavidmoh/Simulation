@@ -24,14 +24,14 @@ namespace Simulation_Assignment
             //_r = new Random(seed);
         }
 
-        public double getExponential(int mean)
+        public double getExponential(double mean)
         {
-            exD.Lambda = (1.0 / Convert.ToDouble(mean));
+            exD.Lambda = (1.0 / mean);
             return exD.NextDouble();
             //return Math.Log(1.0 - _r.NextDouble()) / (-(1 / mean));
         }
 
-        public double getGamma(int mean, double alpha)
+        public double getGamma(double mean, double alpha)
         {
             gammaD.Alpha = alpha;
             gammaD.Theta = (1.0 / Convert.ToDouble(mean));
