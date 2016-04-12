@@ -11,7 +11,7 @@ namespace Simulation_Assignment
     {
         static void Main(string[] args)
         {
-
+            int seed = 743269;
             /*
              * TODO lijst:
              * add random variables and distributions mostly done
@@ -29,7 +29,7 @@ namespace Simulation_Assignment
 
             Directory.CreateDirectory("./output");
 
-            simulationManager simManager = new simulationManager(743269);
+            simulationManager simManager = new simulationManager(seed);
 
             int nextStation = 0;
             int[] travelTimes = { 110, 78, 82, 60, 100, 59, 243, 135, 134, 243, 59, 101, 60, 86, 78, 113, 0};
@@ -42,7 +42,7 @@ namespace Simulation_Assignment
             int trainsPerHour = 4;
             int direction = 0;
             bool last = false;
-            string prefix = "./output/test";
+            string prefix = "./output/test" + seed.ToString();
             int switchIndex = 0;
 
             int doorJamChance = 1;
@@ -105,7 +105,7 @@ namespace Simulation_Assignment
             hour++;
             //create 4 trams per hour up to 21:30
             //and their arrival events
-            for (int j = i; j < i + 11; j++)
+            for (int j = i; j < i + 15; j++)
             {
                 simManager.addEvent(new simQueueEvent(hour * 3600 + ((j-(i)) * 900) - 40, 0, j));
                 trams.Add(j,new tram(j, doorJamChance));
@@ -150,7 +150,7 @@ namespace Simulation_Assignment
                 if (s != null)
                 {
                     //calculate the interval in seconds
-                    interval = new Tuple<int, int>(Convert.ToInt32((Convert.ToDouble(splitData[2]) - 6) * 60 * 60), Convert.ToInt32((Convert.ToDouble(splitData[3]) - 6.0) * 60 * 60));
+                    interval = new Tuple<int, int>(Convert.ToInt32((Convert.ToDouble(splitData[2]) - 6.0) * 60 * 60), Convert.ToInt32((Convert.ToDouble(splitData[3]) - 6.0) * 60 * 60));
                     passengersIn = Convert.ToDouble(splitData[4]);
                     passengersOut = Convert.ToDouble(splitData[5]);
 

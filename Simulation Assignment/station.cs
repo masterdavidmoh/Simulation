@@ -171,7 +171,7 @@ namespace Simulation_Assignment
         /// </summary>
         /// <param name="max">maximum number of people that can exit</param>
         /// <returns>the number of people leaving the tram</returns>
-        public int getExiting(int max, int time, simulationState state)
+        public virtual int getExiting(int max, int time, simulationState state)
         {
             if(_lastStation)
                 return max;

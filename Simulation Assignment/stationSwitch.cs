@@ -112,6 +112,11 @@ namespace Simulation_Assignment
             
         }
 
+        public override int getExiting(int max, int time, simulationState state)
+        {
+            return max;
+        }
+
         public bool switchEmpty
         {
             get { return _switchEmpty; }
