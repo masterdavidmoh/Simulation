@@ -39,7 +39,7 @@ namespace Simulation_Assignment
             stationDist[] outDist = { stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.gamma, stationDist.gamma, stationDist.exponential, stationDist.exponential, stationDist.exponential };
 
             int offset = 0;
-            int trainsPerHour = 4;
+            int trainsPerHour = 10;
             int direction = 0;
             bool last = false;
             string prefix = "./output/test" + seed.ToString();
@@ -70,8 +70,8 @@ namespace Simulation_Assignment
                 offset += travelTimes[k] + 60;
             }
 
-            parsePassengers(stations, "input-data-passengers-01.csv");
-            //parsePassengers(stations, "input-data-passengers-01-2.csv");
+            parsePassengers(stations, "12b.csv.data");
+            parsePassengers(stations, "12a.csv.data");
 
             Console.WriteLine("creating trams");
             //create queue events for all trains + train objects
