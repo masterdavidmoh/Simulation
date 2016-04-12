@@ -66,6 +66,7 @@ namespace Simulation_Assignment
 
                 //string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
                 stations.Add(k ,new station(stationNames[k], k, nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction, inDists[k], inAlphas[k], outDist[k], outAlphas[k]));
+                offset += travelTimes[k];
             }
 
             parsePassengers(stations, "input-data-passengers-01.csv");

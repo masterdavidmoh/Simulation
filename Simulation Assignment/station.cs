@@ -18,7 +18,6 @@ namespace Simulation_Assignment
         protected int _traveToNext;
         protected bool _trainInStation;
         protected List<int> _departureQue;
-        protected int _traveltTimeToNextStation;
         protected int _offset;
         protected StreamWriter _swWaiting;
         protected StreamWriter _swPunctual;
@@ -105,7 +104,7 @@ namespace Simulation_Assignment
             //check arival time expected vs actual arival time
 
             //write # seconds difference from expected time
-            _swPunctual.WriteLine(_nextTrain - state.simulationManager.simulationTime);
+            _swPunctual.WriteLine(state.simulationManager.simulationTime - _nextTrain);
             _swPunctual.Flush();
         }
 
@@ -243,7 +242,7 @@ namespace Simulation_Assignment
             //alpha 34.784 en beta 0.0287
             double multiplier = state.getRandom.getGamma(1.0/0.0287, 34.784);
 
-            return Convert.ToInt32(_traveltTimeToNextStation * multiplier);
+            return Convert.ToInt32(_traveToNext * multiplier);
         }
 
         public double getInterArrivalTime(simulationState state, int time)
