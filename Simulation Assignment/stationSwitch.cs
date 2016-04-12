@@ -12,8 +12,8 @@ namespace Simulation_Assignment
 
         //public station(string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
 
-        public stationSwitch(string name, int id, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction, stationDist inDist, double inAlpha, stationDist outDist, double outalpha)
-            :base(name, id, nextStation, travelTimeToNext, timeOffset, trainsPerHour, lastStation, outputPrefix, 2, inDist, inAlpha, outDist, outalpha)
+        public stationSwitch(string name, int id, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction, stationDist inDist, double inAlpha, stationDist outDist, double outalpha, double scale)
+            :base(name, id, nextStation, travelTimeToNext, timeOffset, trainsPerHour, lastStation, outputPrefix, 2, inDist, inAlpha, outDist, outalpha, scale)
         {
             _switchEmpty = true;
         }

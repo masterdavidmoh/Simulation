@@ -12,6 +12,7 @@ namespace Simulation_Assignment
         static void Main(string[] args)
         {
             int seed = 743269;
+            double scale = 1.0;
             /*
              * TODO lijst:
              * add random variables and distributions mostly done
@@ -39,7 +40,7 @@ namespace Simulation_Assignment
             stationDist[] outDist = { stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.gamma, stationDist.gamma, stationDist.exponential, stationDist.exponential, stationDist.exponential };
 
             int offset = 0;
-            int trainsPerHour = 10;
+            int trainsPerHour = 8;
             int direction = 0;
             bool last = false;
             string prefix = "./output/test" + seed.ToString();
@@ -58,7 +59,7 @@ namespace Simulation_Assignment
 
                 if (stationNames[k] == "Centraal Station Centrumzijde")
                 {
-                    stations.Add(k, new stationSwitch(stationNames[k], k, nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction, inDists[k], inAlphas[k], outDist[k], outAlphas[k]));
+                    stations.Add(k, new stationSwitch(stationNames[k], k, nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction, inDists[k], inAlphas[k], outDist[k], outAlphas[k],scale));
                     direction = 1;
                     switchIndex = k;
                     offset += 4 * 60;
@@ -66,7 +67,7 @@ namespace Simulation_Assignment
                 }
 
                 //string name, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix)
-                stations.Add(k ,new station(stationNames[k], k, nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction, inDists[k], inAlphas[k], outDist[k], outAlphas[k]));
+                stations.Add(k ,new station(stationNames[k], k, nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction, inDists[k], inAlphas[k], outDist[k], outAlphas[k], scale));
                 offset += travelTimes[k] + 60;
             }
 

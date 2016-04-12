@@ -33,12 +33,13 @@ namespace Simulation_Assignment
         protected int _trainsPerHour;
         protected int _nextTrain;
         protected double _arrivalRate;
+        protected double _scale;
 
 
         //maybe add data for inter arival times
         //maybe add data for travel time to next station
 
-        public station(string name, int id, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction, stationDist inDist, double inAlpha, stationDist outDist, double outalpha)
+        public station(string name, int id, int nextStation, int travelTimeToNext, int timeOffset, int trainsPerHour, bool lastStation, string outputPrefix, int direction, stationDist inDist, double inAlpha, stationDist outDist, double outalpha,double scale)
         {
             _name = name;
             _ID = id;
@@ -57,6 +58,7 @@ namespace Simulation_Assignment
             _outDist = outDist;
             _inAlpha = inAlpha;
             _outAlpha = outalpha;
+            _scale = scale;
 
             intervals = new List<Tuple<int, int>>();
             intervals.Add(new Tuple<int, int>(int.MinValue, 0));
@@ -180,14 +182,14 @@ namespace Simulation_Assignment
 
             if (_outDist == stationDist.exponential)
             {
-                passengers = state.getRandom.getExponential(exiting);
+                passengers = state.getRandom.getExponential(_scale * exiting);
             }
             else
             {
                 if (exiting == 0.0)
                     passengers = 0;
                 else
-                    passengers = state.getRandom.getGamma(exiting, _outAlpha);//TODO add alpha
+                    passengers = state.getRandom.getGamma(_scale * exiting, _outAlpha);//TODO add alpha
             }
             
             return Math.Min(Convert.ToInt32(passengers) ,max); 
@@ -277,9 +279,9 @@ namespace Simulation_Assignment
             }
 
             if (_inDist == stationDist.exponential)
-                _arrivalRate = state.getRandom.getExponential(passengers);
+                _arrivalRate = state.getRandom.getExponential(passengers*_scale);
             else
-                _arrivalRate = state.getRandom.getGamma(1/passengers, _inAlpha); //TODO add gamma alpha 
+                _arrivalRate = state.getRandom.getGamma(1/(passengers*_scale), _inAlpha); //TODO add gamma alpha 
         
         }
 
