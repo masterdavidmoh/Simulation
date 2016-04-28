@@ -34,7 +34,7 @@ namespace Simulation_Assignment
         public double getGamma(double mean, double alpha)
         {
             gammaD.Alpha = alpha;
-            gammaD.Theta = (1.0 / Convert.ToDouble(mean));
+            gammaD.Theta = 1.0 / (alpha / mean);
 
             return gammaD.NextDouble();
 

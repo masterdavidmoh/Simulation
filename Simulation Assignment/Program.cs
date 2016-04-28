@@ -11,11 +11,15 @@ namespace Simulation_Assignment
     {
         static void Main(string[] args)
         {
-            int seed = 743269;
+            //int seed = 1337;
+            int seed = 2000;
+            //int seed = 4096;
+            //int seed = 42;
             double scale = 1.0;
+            int trainsPerHour = 30;
             /*
              * TODO lijst:
-             * add random variables and distributions mostly done
+             * add start and end station switch
              * 
              */
 
@@ -28,7 +32,7 @@ namespace Simulation_Assignment
             string[] stationNames = { "P+R Uithof", "WKZ", "UMC", "Heidelberglaan", "Padualaan", "Kromme Rijn", "Galgewaard", "Vaartscherijn", "Centraal Station Centrumzijde", "Vaartscherijn", "Galgewaard", "Kromme Rijn", "Padualaan", "Heidelberglaan", "UMC", "WKZ", "P+R Uithof" };
             Dictionary<int, station> stations = new Dictionary<int, station>();
 
-            Directory.CreateDirectory("./output");
+            Directory.CreateDirectory("./output" + trainsPerHour.ToString() );
 
             simulationManager simManager = new simulationManager(seed);
 
@@ -40,10 +44,10 @@ namespace Simulation_Assignment
             stationDist[] outDist = { stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.exponential, stationDist.gamma, stationDist.gamma, stationDist.exponential, stationDist.exponential, stationDist.exponential };
 
             int offset = 0;
-            int trainsPerHour = 8;
+
             int direction = 0;
             bool last = false;
-            string prefix = "./output/test" + seed.ToString();
+            string prefix = "./output"+ trainsPerHour.ToString() + "/test" + seed.ToString();
             int switchIndex = 0;
 
             int doorJamChance = 1;
@@ -78,13 +82,13 @@ namespace Simulation_Assignment
             //create queue events for all trains + train objects
             Dictionary<int, tram> trams = new Dictionary<int, tram>();
             //create 4 trams for 6:00 to 7:00
-            trams.Add(0,new tram(0, doorJamChance));
+            trams.Add(0,new tram(0, doorJamChance, 0));
             simManager.addEvent(new simQueueEvent(0 - 40, 0, 0));
-            trams.Add(1,new tram(1, doorJamChance));
+            trams.Add(1,new tram(1, doorJamChance, 900));
             simManager.addEvent(new simQueueEvent(900 - 40, 0, 1));
-            trams.Add(2,new tram(2, doorJamChance));
+            trams.Add(2,new tram(2, doorJamChance, 1800));
             simManager.addEvent(new simQueueEvent(1800 - 40, 0, 2));
-            trams.Add(3,new tram(3, doorJamChance));
+            trams.Add(3,new tram(3, doorJamChance, 2700));
             simManager.addEvent(new simQueueEvent(2700 - 40, 0, 3));
 
             //create trains per hour trains per hour up to 19:00
@@ -102,7 +106,7 @@ namespace Simulation_Assignment
                 {
                     simManager.addEvent(new simQueueEvent(hour * 3600 + (((i - 4) % trainsPerHour) * 3600/trainsPerHour) - 40, 0, i));
                 }
-                trams.Add(i,new tram(i, doorJamChance));
+                trams.Add(i, new tram(i, doorJamChance, hour * 3600 + (((i - 4) % trainsPerHour) * 3600 / trainsPerHour)));
                     
             }
             hour++;
@@ -111,7 +115,7 @@ namespace Simulation_Assignment
             for (int j = i; j < i + 15; j++)
             {
                 simManager.addEvent(new simQueueEvent(hour * 3600 + ((j-(i)) * 900) - 40, 0, j));
-                trams.Add(j,new tram(j, doorJamChance));
+                trams.Add(j,new tram(j, doorJamChance,hour * 3600 + ((j-(i)) * 900)));
 
             }
 

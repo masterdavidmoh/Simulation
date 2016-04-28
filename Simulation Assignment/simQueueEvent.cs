@@ -23,6 +23,7 @@ namespace Simulation_Assignment
             {
                 //if not add the tram to the queue
                 state.getStationQueue(_station).Enqueue(_tram);
+                return;
             }
 
             station s = state.getStation(_station);

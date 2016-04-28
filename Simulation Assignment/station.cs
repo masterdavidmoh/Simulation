@@ -106,7 +106,8 @@ namespace Simulation_Assignment
             //check arival time expected vs actual arival time
 
             //write # seconds difference from expected time
-            _swPunctual.WriteLine(state.simulationManager.simulationTime - _nextTrain);
+            //_swPunctual.WriteLine(state.simulationManager.simulationTime - _nextTrain);
+            _swPunctual.WriteLine(state.simulationManager.simulationTime - (state.getTram(tramID).departureTime + _offset));
             _swPunctual.Flush();
         }
 
@@ -129,9 +130,9 @@ namespace Simulation_Assignment
             int time = state.simulationManager.simulationTime;
             //if we are before 7am or after 7 pm set rate to 4 trams
             if (time - _offset < 3600 || time - _offset > 3600 * 13)
-                _nextTrain = Convert.ToInt32(_nextTrain + 3600 / 4.0);
+                _nextTrain = _nextTrain + Convert.ToInt32(3600.0 / 4.0);
             else
-                _nextTrain = Convert.ToInt32(_nextTrain + 3600 / _trainsPerHour);
+                _nextTrain = _nextTrain + Convert.ToInt32(3600.0 / _trainsPerHour);
         }
 
         /// <summary>
