@@ -44,9 +44,12 @@ namespace Simulation_Assignment
                 return getGamma(mean, alpha - 1) + getExponential(mean);*/
         }
 
-        public double getLogNormal(int mean)
+        public double getLogNormal(double mean, double stdev)
         {
-            return 0.0;
+            lognD.Sigma = stdev;
+            lognD.Mu = mean;
+
+            return lognD.NextDouble();
         }
 
         public double getUniform(int min, int max)

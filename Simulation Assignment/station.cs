@@ -243,7 +243,8 @@ namespace Simulation_Assignment
         public int getTravelTime(simulationState state )
         {
             //alpha 34.784 en beta 0.0287
-            double multiplier = state.getRandom.getGamma(1.0/0.0287, 34.784);
+            //double multiplier = state.getRandom.getGamma(0.0287, 34.784);
+            double multiplier = state.getRandom.getLogNormal(0.0018, 0.06379);
 
             return Convert.ToInt32(_traveToNext * multiplier);
         }

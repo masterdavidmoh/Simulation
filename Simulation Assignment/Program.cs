@@ -19,7 +19,6 @@ namespace Simulation_Assignment
             int trainsPerHour = 30;
             /*
              * TODO lijst:
-             * add start and end station switch
              * 
              */
 
