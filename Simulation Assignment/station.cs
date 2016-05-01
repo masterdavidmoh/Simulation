@@ -346,5 +346,20 @@ namespace Simulation_Assignment
             get { return _direction; }
             set { _direction = value; }
         }
+
+        public virtual bool isStartEnd()
+        {
+            return false; 
+        }
+
+        public virtual station getTwin()
+        {
+            return null;
+        }
+        
+        public virtual void setSwitch(bool value)
+        {
+
+        }
     }
 }

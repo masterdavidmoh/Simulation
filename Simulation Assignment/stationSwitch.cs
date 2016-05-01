@@ -117,10 +117,9 @@ namespace Simulation_Assignment
             return max;
         }
 
-        public bool switchEmpty
+        public override void setSwitch(bool value)
         {
-            get { return _switchEmpty; }
-            set { _switchEmpty = value; }
+            _switchEmpty = value;
         }
     }
 }

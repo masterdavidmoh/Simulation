@@ -51,6 +51,9 @@ namespace Simulation_Assignment
             int switchIndex = 0;
 
             int doorJamChance = 1;
+
+
+            valueRef<bool> startEndSwitch = new valueRef<bool>(true);
             //make one of each station we need and add them to the list
             for (int k = 0; k < stationNames.Count(); k++)
             {
@@ -59,6 +62,16 @@ namespace Simulation_Assignment
                 {
                     nextStation = -1;
                     last = true;
+                    stations.Add(k, new stationEnd(stationNames[k], k, nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction, inDists[k], inAlphas[k], outDist[k], outAlphas[k], scale, startEndSwitch, stations[0]));
+                    ((stationStart)stations[0]).setTwin(stations[k]);
+                    offset += travelTimes[k] + 60;
+                    continue;
+                }
+                else if (k == 0)
+                {
+                    stations.Add(k, new stationStart(stationNames[k], k, nextStation, travelTimes[k], offset, trainsPerHour, last, prefix, direction, inDists[k], inAlphas[k], outDist[k], outAlphas[k], scale, startEndSwitch));
+                    offset += travelTimes[k] + 60;
+                    continue;
                 }
 
                 if (stationNames[k] == "Centraal Station Centrumzijde")
