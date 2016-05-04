@@ -283,7 +283,7 @@ namespace Simulation_Assignment
             if (_inDist == stationDist.exponential)
                 _arrivalRate = state.getRandom.getExponential(passengers*_scale);
             else
-                _arrivalRate = state.getRandom.getGamma(1/(passengers*_scale), _inAlpha); //TODO add gamma alpha 
+                _arrivalRate = state.getRandom.getGamma((passengers*_scale), _inAlpha); //TODO add gamma alpha 
         
         }
 

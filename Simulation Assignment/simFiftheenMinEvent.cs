@@ -18,13 +18,17 @@ namespace Simulation_Assignment
             //go over all stations and schedule a new passenger arival event
             int i = 0;
             station s = state.getStation(i);
+            double arivalTime = 0.0;
 
             while (s != null)
             {
                 s.updateArivalRate(time,state);
+                //get time to next arival
+                arivalTime = s.getInterArrivalTime(state, time);
+
                 //schedule new pasenger arival 
-                if (s.getInterArrivalTime(state, time) > 0.0)
-                    state.simulationManager.addEvent(new simPasengerArivalEvent(time + Convert.ToInt32(s.getInterArrivalTime(state,time)), i, time)); 
+                if (arivalTime >= 0.0)
+                    state.simulationManager.addEvent(new simPasengerArivalEvent(time + Convert.ToInt32(arivalTime), i, time)); 
 
                 i++;
                 s = state.getStation(i);

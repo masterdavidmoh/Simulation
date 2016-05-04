@@ -20,15 +20,17 @@ namespace Simulation_Assignment
         public override void executeEvent(simulationState state)
         {
             //find if time is not in the same 15 min timeframe as schedule time, return as we have a new event
-            if (Math.Floor((time / (15.0*60))) != Math.Floor((_scheduleTime / (15.0*60))))
+            if (Math.Floor((time / (15.0*60))) != Math.Floor((_scheduleTime / (15.0*60.0))))
                 return;
 
             station s = state.getStation(_station);
             //add current time to the station arival list
             s.addPassenger(_time);
+            //get inter arival time to the next arival
+            double arivalTime = s.getInterArrivalTime(state, time);
             //schedule new pasenger arival 
-            if (s.getInterArrivalTime(state, time) != -1.0)
-                state.simulationManager.addEvent(new simPasengerArivalEvent(time + Convert.ToInt32(s.getInterArrivalTime(state, time)), _station, time)); 
+            if (arivalTime != -1.0)
+                state.simulationManager.addEvent(new simPasengerArivalEvent(time + Convert.ToInt32(arivalTime), _station, time)); 
         }
     }
 }

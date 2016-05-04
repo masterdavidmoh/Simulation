@@ -12,11 +12,15 @@ namespace Simulation_Assignment
         static void Main(string[] args)
         {
             //int seed = 1337;
-            int seed = 2000;
+            //int seed = 2000;
             //int seed = 4096;
             //int seed = 42;
-            double scale = 1.0;
-            int trainsPerHour = 30;
+            int seed = 2048;
+
+            double scale = 1.5;
+            int trainsPerHour = 16;
+            int doorJamChance = 1;
+
             /*
              * TODO lijst:
              * 
@@ -31,7 +35,11 @@ namespace Simulation_Assignment
             string[] stationNames = { "P+R Uithof", "WKZ", "UMC", "Heidelberglaan", "Padualaan", "Kromme Rijn", "Galgewaard", "Vaartscherijn", "Centraal Station Centrumzijde", "Vaartscherijn", "Galgewaard", "Kromme Rijn", "Padualaan", "Heidelberglaan", "UMC", "WKZ", "P+R Uithof" };
             Dictionary<int, station> stations = new Dictionary<int, station>();
 
-            Directory.CreateDirectory("./output" + trainsPerHour.ToString() );
+
+            string folder = "./output" + seed.ToString();
+            string prefix = folder + "/test" + seed.ToString();
+
+            Directory.CreateDirectory(folder);
 
             simulationManager simManager = new simulationManager(seed);
 
@@ -46,10 +54,10 @@ namespace Simulation_Assignment
 
             int direction = 0;
             bool last = false;
-            string prefix = "./output"+ trainsPerHour.ToString() + "/test" + seed.ToString();
+            
             int switchIndex = 0;
 
-            int doorJamChance = 1;
+            
 
 
             valueRef<bool> startEndSwitch = new valueRef<bool>(true);
