@@ -250,3 +250,10 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+Simulation Assignment/12a.csv.data
+Simulation Assignment/12b.csv.data
+Simulation Assignment/input-data-passengers-01.csv
+Simulation Assignment/input-data-passengers-02.csv
+Simulation Assignment/input-data-passengers-025.csv
+Simulation Assignment/input-data-passengers-03.csv
+Simulation Assignment/Simulation Assignment.sln
