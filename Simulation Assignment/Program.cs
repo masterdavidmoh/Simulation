@@ -9,16 +9,21 @@ namespace Simulation_Assignment
 {
     class Program
     {
+        static public StreamWriter waitingtime;
+        static public StreamWriter punctuality;
+
         static void Main(string[] args)
         {
+    
+
             //int seed = 1337;
             //int seed = 2000;
             //int seed = 4096;
             //int seed = 42;
             int seed = 2048;
 
-            double scale = 1.5;
-            int trainsPerHour = 16;
+            double scale = 1.0;
+            int trainsPerHour = 10;
             int doorJamChance = 1;
 
             /*
@@ -36,8 +41,11 @@ namespace Simulation_Assignment
             Dictionary<int, station> stations = new Dictionary<int, station>();
 
 
-            string folder = "./output" + seed.ToString();
+            string folder = "./output" + trainsPerHour.ToString();
             string prefix = folder + "/test" + seed.ToString();
+
+            waitingtime = new StreamWriter(prefix + "_waitingtime.data");
+            punctuality = new StreamWriter(prefix + "_punctuality.data");
 
             Directory.CreateDirectory(folder);
 
