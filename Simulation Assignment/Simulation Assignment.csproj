@@ -73,9 +73,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
-    <None Include="input-data-passengers-01 - Copy.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="input-data-passengers-01.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
