@@ -109,9 +109,6 @@ namespace Simulation_Assignment
             //_swPunctual.WriteLine(state.simulationManager.simulationTime - _nextTrain);
             _swPunctual.WriteLine(state.simulationManager.simulationTime - (state.getTram(tramID).departureTime + _offset));
             _swPunctual.Flush();
-
-            Program.punctuality.WriteLine( _name + direction.ToString() + " \t" + (state.simulationManager.simulationTime - (state.getTram(tramID).departureTime + _offset))); 
-            Program.punctuality.Flush();
         }
 
         /// <summary>
@@ -164,9 +161,6 @@ namespace Simulation_Assignment
             {
                 _swWaiting.WriteLine(time.ToString() + " \t" + (time - _arrivalTimes[i]).ToString());
                 _swWaiting.Flush();
-
-                Program.waitingtime.WriteLine(_name + direction.ToString() + " \t" + time.ToString() + " \t" + (time - _arrivalTimes[i]).ToString() );
-                Program.waitingtime.Flush();
             }
 
             _arrivalTimes.RemoveRange(0, entering);
@@ -264,7 +258,7 @@ namespace Simulation_Assignment
             // hour/arival * 3600 = seconds/arival
             if (_arrivalRate <= 0.0)
                 return -1.0;
-            double result = state.getRandom.getExponential( 3600 / _arrivalRate);
+            double result = 3600 / state.getRandom.getExponential( _arrivalRate);
 
             // make sure we dont return some arbitrary large value that overflows integers
             if(result > 7200.0)

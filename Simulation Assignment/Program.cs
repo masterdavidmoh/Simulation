@@ -16,14 +16,14 @@ namespace Simulation_Assignment
         {
     
 
-            int seed = 1337;
+            //int seed = 1337;
             //int seed = 2000;
             //int seed = 4096;
             //int seed = 42;
-            //int seed = 2048;
+            int seed = 2048;
 
             double scale = 1.0;
-            int trainsPerHour = 30;
+            int trainsPerHour = 10;
             int doorJamChance = 1;
 
             /*
@@ -44,12 +44,10 @@ namespace Simulation_Assignment
             string folder = "./output" + trainsPerHour.ToString();
             string prefix = folder + "/test" + seed.ToString();
 
-            Directory.CreateDirectory(folder);
-
             waitingtime = new StreamWriter(prefix + "_waitingtime.data");
             punctuality = new StreamWriter(prefix + "_punctuality.data");
 
-
+            Directory.CreateDirectory(folder);
 
             simulationManager simManager = new simulationManager(seed);
 
